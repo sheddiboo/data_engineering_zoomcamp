@@ -12,3 +12,6 @@ __pycache__/
 venv/
 .venv/
 env/
+
+# database folder
+ny_taxi_postgres_data/

@@ -12,7 +12,7 @@ print(f"Running pipeline for day {day}")
 df = pd.DataFrame({"A": [1, 2], "B": [3, 4]})
 
 # Assign the 'day' variable to a new column
-df['month'] = day
+df['day'] = day
 print(df.head())
 
 # Save the DataFrame to a parquet file using the day in the name
