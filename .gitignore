@@ -1,0 +1,14 @@
+# --- User Requested Ignores ---
+*.parquet
+.vscode/
+*.code-workspace
+
+# --- Standard Python Ignores ---
+# Compiled python files (these appear automatically when you run code)
+__pycache__/
+*.py[cod]
+
+# Virtual Environments (Large folders you never want in Git)
+venv/
+.venv/
+env/
