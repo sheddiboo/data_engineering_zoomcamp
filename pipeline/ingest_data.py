@@ -1,42 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 import pandas as pd
+from sqlalchemy import create_engine
+from tqdm.auto import tqdm
+import click
 
-
-# In[2]:
-
-
-prefix = 'https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/'
-df = pd.read_csv(prefix + 'yellow_tripdata_2021-01.csv.gz', nrows=100)
-
-
-# In[3]:
-
-
-df.head()
-
-
-# In[4]:
-
-
-# Check data types
-df.dtypes
-
-
-# In[5]:
-
-
-# Check data shape
-df.shape
-
-
-# In[6]:
-
-
+# Schema Definitions
 dtype = {
     "VendorID": "Int64",
     "passenger_count": "Int64",
@@ -61,92 +28,54 @@ parse_dates = [
     "tpep_dropoff_datetime"
 ]
 
-df = pd.read_csv(
-    prefix + 'yellow_tripdata_2021-01.csv.gz',
-    dtype=dtype,
-    parse_dates=parse_dates
-)
+@click.command()
+@click.option('--pg-user', default='root', help='PostgreSQL user')
+@click.option('--pg-pass', default='root', help='PostgreSQL password')
+@click.option('--pg-host', default='localhost', help='PostgreSQL host')
+@click.option('--pg-port', default=5432, type=int, help='PostgreSQL port')
+@click.option('--pg-db', default='ny_taxi', help='PostgreSQL database name')
+@click.option('--target-table', default='yellow_taxi_data', help='Target table name')
+@click.option('--url', default='https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz', help='URL of the CSV file')
+def run(pg_user, pg_pass, pg_host, pg_port, pg_db, target_table, url):
+    
+    # Create Database Connection
+    connection_string = f'postgresql://{pg_user}:{pg_pass}@{pg_host}:{pg_port}/{pg_db}'
+    print(f"Connecting to {connection_string}...")
+    engine = create_engine(connection_string)
 
+    print(f"Downloading data from {url}...")
+    
+    # Create an iterator to read the CSV in chunks
+    chunksize = 100000
+    df_iter = pd.read_csv(
+        url,
+        dtype=dtype,
+        parse_dates=parse_dates,
+        iterator=True,
+        chunksize=chunksize
+    )
+    
+    first = True
 
-# In[9]:
+    # Loop through chunks
+    for df_chunk in tqdm(df_iter, desc="Ingesting Data"):
+        
+        if first:
+            # Create table schema (no data)
+            df_chunk.head(0).to_sql(
+                name=target_table,
+                con=engine,
+                if_exists="replace"
+            )
+            first = False
+            print(f"Table '{target_table}' initialized.")
 
+        # Insert chunk
+        df_chunk.to_sql(
+            name=target_table,
+            con=engine,
+            if_exists="append"
+        )
 
-df
-
-
-# In[8]:
-
-
-# Check data shape
-df.shape
-
-
-# In[10]:
-
-
-#Create Database Connection
-from sqlalchemy import create_engine
-engine = create_engine('postgresql://root:root@localhost:5432/ny_taxi')
-
-
-# In[ ]:
-
-
-
-
-
-# In[11]:
-
-
-# Get DDL Schema
-print(pd.io.sql.get_schema(df, name='yellow_taxi_data', con=engine))
-
-
-# In[12]:
-
-
-# Create the Table
-df.head(n=0).to_sql(name='yellow_taxi_data', con=engine, if_exists='replace')
-
-
-# **Ingesting Data in Chunks**
-
-# In[20]:
-
-
-# Create an iterator to read the CSV in chunks of 100,000 rows to save memory.
-df_iter = pd.read_csv(
-    prefix + 'yellow_tripdata_2021-01.csv.gz',
-    dtype=dtype,
-    parse_dates=parse_dates,
-    iterator=True,
-    chunksize=100000
-)
-
-
-# In[21]:
-
-
-df_iter
-
-
-# In[22]:
-
-
-from tqdm.auto import tqdm
-
-
-# In[23]:
-
-
-# Loop through chunks with a progress bar, appending each batch to the database.
-for df_chunk in tqdm(df_iter):
-    df_chunk.to_sql(name='yellow_taxi_data', con=engine, if_exists='append')
-    print(len(df_chunk))
-
-
-# In[ ]:
-
-
-
-
+if __name__ == '__main__':
+    run()
