@@ -16,3 +16,17 @@ env/
 # database folder
 ny_taxi_postgres_data/
 uv.lock
+
+# --- Terraform ---
+# Ignore the hidden .terraform folder (plugins)
+.terraform/
+# Ignore state files (Contains secrets!)
+*.tfstate
+*.tfstate.*
+# Ignore variables file if you ever create one with real secrets
+*.tfvars
+# Ignore crash logs
+crash.log
+override.tf
+override.tf.json
+.terraform.lock.hcl
