@@ -1,0 +1,33 @@
+id: 06_aws_kv
+namespace: zoomcamp
+
+tasks:
+  - id: aws_access_key
+    type: io.kestra.plugin.core.kv.Set
+    key: AWS_ACCESS_KEY_ID
+    kvType: STRING
+    value: "" # Access key ID stored here
+
+  - id: aws_secret_key
+    type: io.kestra.plugin.core.kv.Set
+    key: AWS_SECRET_ACCESS_KEY
+    kvType: STRING
+    value: "" # Secret access key stored here 
+
+  - id: aws_region
+    type: io.kestra.plugin.core.kv.Set
+    key: AWS_REGION
+    kvType: STRING
+    value: "eu-west-1"
+
+  - id: aws_s3_bucket
+    type: io.kestra.plugin.core.kv.Set
+    key: AWS_S3_BUCKET
+    kvType: STRING
+    value: "zoomcamp-data-shedrack-2026"
+
+  - id: aws_athena_database
+    type: io.kestra.plugin.core.kv.Set
+    key: AWS_ATHENA_DATABASE
+    kvType: STRING
+    value: "zoomcamp"
