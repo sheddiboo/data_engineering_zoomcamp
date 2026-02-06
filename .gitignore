@@ -30,3 +30,7 @@ crash.log
 override.tf
 override.tf.json
 .terraform.lock.hcl
+
+# --- AWS Installation Junk ---
+aws/
+awscliv2.zip
