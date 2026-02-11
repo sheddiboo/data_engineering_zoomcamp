@@ -1,14 +1,26 @@
-# --- User Requested Ignores ---
+# --- dbt (New!) ---
+target/
+dbt_packages/
+dbt_modules/
+logs/
+
+# --- DuckDB & Data (New!) ---
+*.duckdb
+*.duckdb.wal
 *.parquet
+*.csv
+*.csv.gz
+
+# --- User Requested Ignores ---
 .vscode/
 *.code-workspace
 
 # --- Standard Python Ignores ---
-# Compiled python files (these appear automatically when you run code)
+# Compiled python files
 __pycache__/
 *.py[cod]
 
-# Virtual Environments (Large folders you never want in Git)
+# Virtual Environments
 venv/
 .venv/
 env/
@@ -18,14 +30,10 @@ ny_taxi_postgres_data/
 uv.lock
 
 # --- Terraform ---
-# Ignore the hidden .terraform folder (plugins)
 .terraform/
-# Ignore state files (Contains secrets!)
 *.tfstate
 *.tfstate.*
-# Ignore variables file if you ever create one with real secrets
 *.tfvars
-# Ignore crash logs
 crash.log
 override.tf
 override.tf.json
