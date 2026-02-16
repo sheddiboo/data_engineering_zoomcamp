@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: dim_zones
+    description: Taxi zone dimension table
+    columns:
+      - name: location_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_vendors
+    description: Vendor dimension table mapping IDs to names
+
+  - name: fct_trips
+    description: Fact table with all taxi trips
+    columns:
+      - name: trip_id
+        data_type: string
+        data_tests:
+          - unique
+          - not_null
+      - name: trip_duration_minutes
+        data_type: bigint
+      - name: total_amount
+        data_type: double
+        data_tests:
+          - not_null

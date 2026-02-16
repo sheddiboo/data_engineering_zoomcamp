@@ -1,0 +1,20 @@
+version: 2
+
+seeds:
+  - name: taxi_zone_lookup
+    description: >
+      Taxi Zones mapping based on NYC neighborhoods, including service zones.
+    columns:
+      - name: locationid
+        data_tests:
+          - unique
+          - not_null
+
+  - name: payment_type_lookup
+    description: >
+      Maps numeric payment codes to human-readable descriptions.
+    columns:
+      - name: payment_type
+        data_tests:
+          - unique
+          - not_null

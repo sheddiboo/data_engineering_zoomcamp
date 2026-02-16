@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: int_trips_unioned
+    description: Union of green and yellow taxi trip data
+    columns:
+      - name: service_type
+        description: Green or Yellow
+
+  - name: int_trips
+    description: Cleaned and enriched trip data
+    columns:
+      - name: trip_id
+        data_tests:
+          - unique
+          - not_null
+      - name: payment_type_description
+        description: Human-readable payment method

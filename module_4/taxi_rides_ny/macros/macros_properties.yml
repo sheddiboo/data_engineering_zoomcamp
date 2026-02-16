@@ -1,0 +1,27 @@
+version: 2
+
+macros:
+  - name: get_trip_duration_minutes
+    description: >
+      Calculates trip duration in minutes for AWS Athena.
+    arguments:
+      - name: pickup_datetime
+        type: timestamp
+      - name: dropoff_datetime
+        type: timestamp
+
+  - name: get_vendor_data
+    description: >
+      Maps vendor_id to vendor_name using an Athena CASE statement.
+    arguments:
+      - name: vendor_id_column
+        type: string
+
+  - name: safe_cast
+    description: >
+      Uses Athena's try_cast to handle messy data without failing the run.
+    arguments:
+      - name: column
+        type: string
+      - name: data_type
+        type: string

@@ -1,32 +1,24 @@
-# --- dbt (New!) ---
+# --- dbt ---
 target/
 dbt_packages/
 dbt_modules/
 logs/
 
-# --- DuckDB & Data (New!) ---
-*.duckdb
-*.duckdb.wal
+# --- Data & Downloads ---
+# Ignore all large data files by default
 *.parquet
 *.csv
 *.csv.gz
 
-# --- User Requested Ignores ---
-.vscode/
-*.code-workspace
+# ...BUT explicitly allow your lookup files in the seeds folder
+!seeds/*.csv
 
-# --- Standard Python Ignores ---
-# Compiled python files
+# --- Standard Python ---
 __pycache__/
 *.py[cod]
-
-# Virtual Environments
-venv/
 .venv/
+venv/
 env/
-
-# database folder
-ny_taxi_postgres_data/
 uv.lock
 
 # --- Terraform ---
@@ -34,11 +26,15 @@ uv.lock
 *.tfstate
 *.tfstate.*
 *.tfvars
-crash.log
-override.tf
-override.tf.json
 .terraform.lock.hcl
+crash.log
 
-# --- AWS Installation Junk ---
+# --- AWS & System ---
 aws/
 awscliv2.zip
+.vscode/
+*.code-workspace
+.DS_Store
+
+# --- Project Specific ---
+ny_taxi_postgres_data/

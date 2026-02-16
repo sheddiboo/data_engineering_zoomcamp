@@ -2,6 +2,3 @@
 target/
 dbt_packages/
 logs/
-
-# Data directory
-data/

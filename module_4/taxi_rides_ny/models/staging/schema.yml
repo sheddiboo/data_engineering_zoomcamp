@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: stg_green_tripdata
+    description: >
+      Staging model for green taxi trip data. Standardizes column names and types.
+    columns:
+      - name: vendor_id
+        data_tests:
+          - not_null
+      - name: pickup_datetime
+        data_tests:
+          - not_null
+      - name: payment_type
+        data_tests:
+          - accepted_values:
+              values: ['1', '2', '3', '4', '5', '6']
+
+  - name: stg_yellow_tripdata
+    description: >
+      Staging model for yellow taxi trip data. Standardizes column names and types.
+    columns:
+      - name: vendor_id
+        data_tests:
+          - not_null
+      - name: pickup_datetime
+        data_tests:
+          - not_null
+      - name: payment_type
+        data_tests:
+          - accepted_values:
+              values: ['1', '2', '3', '4', '5', '6']
