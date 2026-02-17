@@ -26,3 +26,17 @@ models:
         data_type: double
         data_tests:
           - not_null
+
+  # --- New Model Added Below ---
+  - name: fct_monthly_zone_revenue
+    description: Monthly aggregated revenue by zone
+    columns:
+      - name: revenue_month
+        data_type: timestamp
+        description: The month of the revenue calculation
+      - name: pickup_zone
+        data_type: string
+        description: Zone name where the trip started
+      - name: revenue_monthly_total_amount
+        data_type: double
+        description: Sum of total amount for the zone/month

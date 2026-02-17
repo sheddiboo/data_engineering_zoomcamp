@@ -6,7 +6,7 @@ with source as (
 
 renamed as (
     select
-        -- identifiers (Use TRY_CAST to handle empty strings)
+        -- identifiers
         try_cast(vendorid as integer) as vendor_id,
         try_cast(ratecodeid as integer) as rate_code_id,
         try_cast(pulocationid as integer) as pickup_location_id,
@@ -20,6 +20,7 @@ renamed as (
         store_and_fwd_flag,
         try_cast(passenger_count as integer) as passenger_count,
         try_cast(trip_distance as double) as trip_distance,
+        -- Yellow taxis are always Street Hail (1), so we hardcode this
         1 as trip_type, 
 
         -- payment info
@@ -34,8 +35,8 @@ renamed as (
         try_cast(payment_type as integer) as payment_type
 
     from source
-    -- We filter out rows where vendorid is truly null/empty after the cast
-    where try_cast(vendorid as integer) is not null
+    -- Safety check: drop rows where vendorid cannot be parsed
+    -- where try_cast(vendorid as integer) is not null  <-- COMMENTED OUT TO KEEP ALL DATA
 )
 
 select * from renamed

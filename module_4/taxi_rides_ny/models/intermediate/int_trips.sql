@@ -1,28 +1,28 @@
-{{
-    config(
-        materialized='view'
-    )
-}}
+{{ config(materialized='view') }}
 
 with trips_unioned as (
     select * from {{ ref('int_trips_unioned') }}
 ),
 
+dim_payment_type as (
+    select * from {{ ref('payment_type_lookup') }}
+),
+
 trips_with_rn as (
     select 
-        *,
+        trips_unioned.*,
         row_number() over(
-            partition by vendor_id, pickup_datetime 
+            partition by vendor_id, pickup_datetime, pickup_location_id 
             order by pickup_datetime
         ) as rn
     from trips_unioned
 )
 
 select
-    -- 1. Generate trip_id
-    cast(vendor_id as varchar) || cast(pickup_datetime as varchar) as trip_id,
+    -- FIX: Use COALESCE(vendor_id, -1) so the ID doesn't become NULL
+    cast(coalesce(vendor_id, -1) as varchar) || cast(pickup_datetime as varchar) || cast(pickup_location_id as varchar) || '-' || cast(rn as varchar) as trip_id,
     
-    -- 2. Select standard columns
+    -- Select standard columns
     vendor_id,
     service_type,
     rate_code_id,
@@ -42,8 +42,13 @@ select
     ehail_fee,
     improvement_surcharge,
     total_amount,
-    payment_type,
+    
+    -- Specify the table alias here to solve ambiguity
+    trips_with_rn.payment_type, 
 
-    cast('unknown' as varchar) as payment_type_description
+    -- Join correctly using the description
+    coalesce(dim_payment_type.description, 'Unknown') as payment_type_description
+
 from trips_with_rn
-where rn = 1
+left join dim_payment_type 
+    on trips_with_rn.payment_type = dim_payment_type.payment_type

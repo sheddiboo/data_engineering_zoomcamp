@@ -1,13 +1,14 @@
-{{ config(materialized='view') }}
+-- depends_on: {{ ref('fct_trips') }}
+{{ config(materialized='table') }}
 
 with trips_data as (
     select * from {{ ref('fct_trips') }}
 )
 select 
     -- Grouping fields
-    t.pickup_zone as zone,
-    {{ dbt.date_trunc("month", "pickup_datetime") }} as revenue_month,
-    service_type,
+    t.pickup_zone,
+    {{ dbt.date_trunc("month", "pickup_datetime") }} as revenue_month, 
+    service_type, 
 
     -- Revenue calculations
     sum(fare_amount) as revenue_monthly_fare,

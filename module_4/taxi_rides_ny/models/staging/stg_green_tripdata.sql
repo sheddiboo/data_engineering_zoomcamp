@@ -34,7 +34,7 @@ renamed as (
         try_cast(payment_type as integer) as payment_type
         
     from source
-    where try_cast(vendorid as integer) is not null
+    -- where try_cast(vendorid as integer) is not null  <-- COMMENTED OUT TO KEEP ALL DATA
 )
 
 select * from renamed
