@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='view') }}
 
 with vendor_ids as (
     select distinct vendor_id from {{ ref('fct_trips') }}

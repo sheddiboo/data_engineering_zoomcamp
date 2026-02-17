@@ -19,11 +19,13 @@ trips_with_rn as (
 )
 
 select
-    -- Explicitly list all columns here instead of using EXCEPT
-    trip_id,
+    -- 1. Generate trip_id
+    cast(vendor_id as varchar) || cast(pickup_datetime as varchar) as trip_id,
+    
+    -- 2. Select standard columns
     vendor_id,
     service_type,
-    rate_code,
+    rate_code_id,
     pickup_location_id,
     pickup_datetime,
     dropoff_location_id,
@@ -41,6 +43,7 @@ select
     improvement_surcharge,
     total_amount,
     payment_type,
-    payment_type_description
+
+    cast('unknown' as varchar) as payment_type_description
 from trips_with_rn
 where rn = 1
