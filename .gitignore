@@ -5,21 +5,27 @@ dbt_modules/
 logs/
 
 # --- Data & Downloads ---
+# Ignore specific data directories
+data/
+fhvhv/
+
 # Ignore all large data files by default
 *.parquet
 *.csv
 *.csv.gz
+*.csv.gz.*
 
 # ...BUT explicitly allow your lookup files in the seeds folder
 !seeds/*.csv
 
-# --- Standard Python ---
+# --- Standard Python & Jupyter ---
 __pycache__/
 *.py[cod]
 .venv/
 venv/
 env/
 uv.lock
+.ipynb_checkpoints/
 
 # --- Terraform ---
 .terraform/
