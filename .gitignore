@@ -51,3 +51,15 @@ logs/*.log
 # Ignore local databases
 *.db
 *.duckdb
+
+# --- Spark Installation Files ---
+# Ignore the compressed Spark archive
+module_6/*.tgz
+
+# Ignore the extracted Spark engine directory
+module_6/spark-3.5.3-bin-hadoop3/
+
+# Ignore local Spark warehouse and logs
+spark-warehouse/
+module_6/spark-3.5.3-bin-hadoop3/logs/
+*.out
