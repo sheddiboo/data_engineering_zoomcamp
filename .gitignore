@@ -63,3 +63,9 @@ module_6/spark-3.5.3-bin-hadoop3/
 spark-warehouse/
 module_6/spark-3.5.3-bin-hadoop3/logs/
 *.out
+
+# --- Spark Job Outputs & Metadata ---
+# Ignore locally generated output folders and Spark success/checksum files
+hw_q2_output/
+_SUCCESS
+*.crc

@@ -23,12 +23,12 @@ conf = SparkConf() \
 # Initialize Session
 spark = SparkSession.builder.appName('taxi_production_etl').config(conf=conf).getOrCreate()
 
-# Load and standardize Green/Yellow Data
-df_green = spark.read.option("recursiveFileLookup", "true").parquet(args.input_green) \
+# Load and standardize Green/Yellow Data (UPDATED TO READ CSV.GZ)
+df_green = spark.read.option("header", "true").option("inferSchema", "true").option("recursiveFileLookup", "true").csv(args.input_green) \
     .withColumnRenamed('lpep_pickup_datetime', 'pickup_datetime') \
     .withColumnRenamed('lpep_dropoff_datetime', 'dropoff_datetime')
 
-df_yellow = spark.read.option("recursiveFileLookup", "true").parquet(args.input_yellow) \
+df_yellow = spark.read.option("header", "true").option("inferSchema", "true").option("recursiveFileLookup", "true").csv(args.input_yellow) \
     .withColumnRenamed('tpep_pickup_datetime', 'pickup_datetime') \
     .withColumnRenamed('tpep_dropoff_datetime', 'dropoff_datetime')
 
